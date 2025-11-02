@@ -33,6 +33,7 @@ export const SwaggerConfig = (
   });
 
   // Filter the document paths to only include endpoints with relevant tags
+  SwaggerModule.setup('habibapi/docs', app, document);
 };
 
 
