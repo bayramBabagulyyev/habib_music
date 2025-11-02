@@ -39,7 +39,7 @@ export class AuthService {
     // }
     const user: UserModel = await this.userService.getUserByUsername(
       dto.email,
-      'user',
+
     );
 
     if (user) {
@@ -49,7 +49,6 @@ export class AuthService {
       email: dto.email,
       password: dto.password,
       fullName: dto.fullName,
-      phoneNumber: dto.phoneNumber,
       isSuper: false,
       notify: true,
     });
@@ -57,16 +56,16 @@ export class AuthService {
       throw new NotFoundException('User not created');
     }
     const payload: JwtPayload = {
-      id: createdUser.data.id,
+      id: createdUser.id,
       type: UserType.USER,
-      email: createdUser.data.email,
-      isSuper: createdUser.data.isSuper,
+      email: createdUser.email,
+      isSuper: createdUser.isSuper,
     };
     const waitingToken: Promise<TokenDto> =
       this.tokenService.generateAuthToken(payload);
 
     const token: TokenDto = await waitingToken;
-    token.isSuperUser = createdUser.data.isSuper;
+    token.isSuperUser = createdUser.isSuper;
 
     return responseMessage({ action: 'success', data: token });
   }
@@ -78,7 +77,6 @@ export class AuthService {
     // }
     const user: UserModel = await this.userService.getUserByUsername(
       dto.email,
-      'user',
     );
 
     if (!user) {
@@ -87,10 +85,11 @@ export class AuthService {
 
     const payload: JwtPayload = {
       id: user.id,
-      type: UserType.USER,
-      email: user.email,
-      isSuper: user.isSuper,
+      type: UserType.ADMIN,
+      email: user.dataValues.email,
+      isSuper: user.dataValues.isSuper,
     };
+    console.log('payload', payload);
     const waitingToken: Promise<TokenDto> =
       this.tokenService.generateAuthToken(payload);
 
@@ -107,7 +106,7 @@ export class AuthService {
     // }
     const user: UserModel = await this.userService.getUserByUsername(
       dto.email,
-      'admin',
+      UserType.ADMIN,
     );
     console.log('user', user);
     if (!user) {
@@ -129,8 +128,8 @@ export class AuthService {
     const payload: JwtPayload = {
       id: user.id,
       type: UserType.ADMIN,
-      email: user.email,
-      isSuper: user.isSuper,
+      email: user.dataValues.email,
+      isSuper: user.dataValues.isSuper,
     };
     const waitingToken: Promise<TokenDto> =
       this.tokenService.generateAuthToken(payload);
@@ -142,7 +141,7 @@ export class AuthService {
   }
 
   async forgotPassword(dto: ForgotPasswordDto) {
-    const user = await this.userService.getUserByUsername(dto.email, 'user');
+    const user = await this.userService.getUserByUsername(dto.email);
     if (!user) {
       throw new NotFoundException('User not found');
     }

@@ -24,13 +24,6 @@ export class CreateUserDto {
   fullName: string;
 
   @ApiProperty({
-    type: 'string',
-    required: true,
-  })
-  @IsString()
-  phoneNumber: string;
-
-  @ApiProperty({
     type: 'boolean',
     required: false,
     default: false,

@@ -9,11 +9,11 @@ export class Pagination {
    * @param dtos {t[]}
    * @returns {PaginationResponseDto}
    */
-  static of<T>(
-    { limit, page, skip }: PaginationRequest,
+  static of<T, R>(
+    { limit, page, skip }: PaginationRequest<T>,
     totalRecords: number,
-    dtos: T[],
-  ): PaginationResponseDto<T> {
+    dtos: R[],
+  ): PaginationResponseDto<R> {
     const totalPages =
       Math.floor(totalRecords / limit) + (totalRecords % limit > 0 ? 1 : 0);
     const currentPage = +page > 0 ? +page : 1;

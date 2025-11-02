@@ -1,35 +1,48 @@
 import {
   CallHandler,
   ExecutionContext,
+  HttpStatus,
   Injectable,
   NestInterceptor,
 } from '@nestjs/common';
 
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 class ResponseDto<T> {
-  payload: T;
-  timestamp: number;
+  status: HttpStatus;
+  title: string;
+  message: 'Successfully!'
+  data: T;
 }
+
 @Injectable()
-export class HttpResponseInterceptor<T> implements NestInterceptor<T> {
+export class HttpResponseInterceptor<T> implements NestInterceptor<T, ResponseDto<T>> {
   /**
    * Intercept the request and add the timestamp
    * @param context {ExecutionContext}
    * @param next {CallHandler}
-   * @returns { payload:Response<T>, timestamp: string }
+   * @returns { success: boolean, payload: Response<T>, timestamp: number }
    */
   intercept(
     context: ExecutionContext,
     next: CallHandler,
   ): Observable<ResponseDto<T>> {
-    // const timestamp = new Date().getTime();
-    return next.handle();
 
-    // return next.handle().pipe(
-    //   map((payload) => {
-    //     return { payload, timestamp };
-    //   }),
-    // );
+
+    return next.handle().pipe(
+      map((payload) => {
+
+        if (payload && payload.totalPages) {
+          return payload; // If payload already has totalPages, return as is
+        }
+        return {
+          "status": 200,
+          "title": "OK",
+          "message": "Successfully!",
+          "data": payload
+        };
+      }),
+    );
   }
 }

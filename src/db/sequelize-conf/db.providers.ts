@@ -1,5 +1,5 @@
 
-import { UserModel } from '@modules/users/models/user.model';
+import { AboutModel, AlbumModel, AudioModel, FileModel, GenreMediaModel, GenreModel, MediaModel, UserModel, VideoModel } from '@db/models';
 import { Sequelize } from 'sequelize-typescript';
 import { dataBaseConfig } from './db.config';
 import { IDatabaseConfigAttributes } from './db.interface';
@@ -17,7 +17,15 @@ export const databaseProviders = [
         timezone,
       });
       sequelize.addModels([
-        UserModel
+        AlbumModel,
+        AudioModel,
+        FileModel,
+        GenreMediaModel,
+        GenreModel,
+        UserModel,
+        VideoModel,
+        MediaModel,
+        AboutModel
       ]);
       // await sequelize.sync();
       await sequelize.sync({ alter: true });

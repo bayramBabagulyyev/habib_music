@@ -10,7 +10,7 @@ import type { UUID } from 'crypto';
 
 export class ResponseUserDto {
   @IsUUID()
-  declare id: UUID;
+  id: UUID;
 
   @ApiProperty({ type: 'string', required: true })
   @IsDate()

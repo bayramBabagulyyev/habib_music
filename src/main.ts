@@ -1,6 +1,7 @@
 import { HttpResponseInterceptor } from '@common/http';
 import { IEnvironment } from '@common/interfaces';
 import { SwaggerConfig } from '@config';
+import { Seeder } from '@db/seeders/superAdmin.seeder';
 import compression from '@fastify/compress';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -16,7 +17,7 @@ import { I18nValidationExceptionFilter } from 'nestjs-i18n';
 import { join } from 'path';
 import 'reflect-metadata';
 import { AppModule } from './app.module';
-async function marify() {
+async function music() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter({ logger: true }),
@@ -70,6 +71,10 @@ async function marify() {
     SwaggerConfig(app, appVersion, url);
   }
 
+  // Seed super user
+  Seeder.seedSuperUser()
+
+
   // await app.register(helmet, {
   //   contentSecurityPolicy: {
   //     directives: {
@@ -97,4 +102,4 @@ async function marify() {
 
   // return appPort;
 }
-marify();
+music();

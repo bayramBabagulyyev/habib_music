@@ -1,6 +1,3 @@
-import { TOKEN_NAME } from '@common/constants';
-import type { PaginationRequest } from '@common/libs/pagination';
-import { PaginationParams } from '@common/libs/pagination';
 import {
   Body,
   Controller,
@@ -14,11 +11,11 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import type { UUID } from 'crypto';
-
-import { CurrentUser, SkipAuth } from '@modules/auth';
-import { JustUser } from '@modules/auth/decorators/skip-auth.decorator';
-import type { JwtPayload } from '@modules/auth/dtos';
 import { I18n, I18nContext } from 'nestjs-i18n';
+import { PaginationParams, type PaginationRequest } from '../../../common/libs/pagination';
+import { CurrentUser, SkipAuth, TOKEN_NAME } from '../../auth';
+import { JustUser } from '../../auth/decorators/skip-auth.decorator';
+import type { JwtPayload } from '../../auth/dtos';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UserQueryDto } from '../dto/query-user.dto';
 import { UpdateProfileDto } from '../dto/update-profile.dto';
@@ -26,7 +23,7 @@ import { UsersService } from '../services/users.service';
 
 @ApiTags('users')
 @ApiBearerAuth(TOKEN_NAME)
-@Controller({ path: 'users', version: '1' })
+@Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
@@ -38,7 +35,7 @@ export class UsersController {
 
   @Get()
   findAll(
-    @PaginationParams() pagination: PaginationRequest,
+    @PaginationParams() pagination: PaginationRequest<UserQueryDto>,
     @Query() _query: UserQueryDto,
   ) {
     return this.usersService.findAll(pagination, _query);

@@ -10,6 +10,15 @@ import {
 import { OrderDirection } from './order-direction.dto';
 
 export abstract class PaginationDto {
+
+  @ApiProperty({
+    type: 'string',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  search: string;
+
   @ApiProperty({
     type: 'number',
     required: true,

@@ -1,6 +1,5 @@
 import { UserType } from '@common/enums';
 import type { UUID } from 'crypto';
-
 import {
   Column,
   DataType,
@@ -11,7 +10,7 @@ import {
 } from 'sequelize-typescript';
 
 @Table({ tableName: 'users' })
-export class UserModel extends Model<UserModel> {
+export class UserModel extends Model {
   @Index({ unique: true, name: 'unique_username_isDeleted' })
   static compositeUniqueIndex: [string, string] = ['email', 'isDeleted'];
 
@@ -22,12 +21,8 @@ export class UserModel extends Model<UserModel> {
     defaultValue: DataType.UUIDV4,
   })
   declare id: UUID;
-
   @Column({ type: DataType.STRING, allowNull: false })
   email: string;
-
-  @Column({ type: DataType.STRING, allowNull: false })
-  phoneNumber: string;
 
   @Column({ type: DataType.STRING, allowNull: false })
   password: string;
@@ -38,9 +33,6 @@ export class UserModel extends Model<UserModel> {
 
   @Column({ type: DataType.BOOLEAN, allowNull: false, defaultValue: false })
   isSuper: boolean;
-
-  @Column({ type: DataType.BOOLEAN, allowNull: false, defaultValue: false })
-  notify: boolean;
 
   @Column({
     type: DataType.BOOLEAN,
@@ -55,6 +47,5 @@ export class UserModel extends Model<UserModel> {
     defaultValue: UserType.USER,
   })
   type: UserType;
-
 
 }

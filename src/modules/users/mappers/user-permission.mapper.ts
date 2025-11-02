@@ -1,4 +1,4 @@
-import { UUID } from 'crypto';
+import type { UUID } from 'crypto';
 import { UserPermissionInterface } from '../interfaces/user-permission.interface';
 
 export class UserPermissionMapper {

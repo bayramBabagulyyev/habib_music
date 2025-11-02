@@ -1,5 +1,6 @@
 import { UserType } from '@common/enums';
-import { UserModel } from '@modules/users/models/user.model';
+import { UserModel } from '@db/models';
+import { Logger } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
 
 export class Seeder {
@@ -16,7 +17,9 @@ export class Seeder {
         fullName: 'Super Admin',
         type: UserType.ADMIN,
         isSuper: true,
-      } as typeof UserModel.prototype, // or use the correct creation attributes type if available
+      } as any,
     });
+
+    Logger.warn(`Super Admin seeded with email: test@gmail.com`);
   }
 }

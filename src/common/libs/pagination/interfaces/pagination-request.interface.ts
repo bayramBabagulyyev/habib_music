@@ -3,7 +3,7 @@ import { OrderDirection } from '@common/global-dto';
 /**
  * Interface intended for requesting results paginated
  */
-export interface PaginationRequest {
+export interface PaginationRequest<T> {
   // Number of records to skip (where the pagination shall start)
   skip?: number;
   /**
@@ -26,5 +26,5 @@ export interface PaginationRequest {
   orderDirection: OrderDirection;
 
   // Other params of type T
-  params?: any;
+  params?: T;
 }

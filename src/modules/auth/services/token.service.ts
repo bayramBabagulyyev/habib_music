@@ -82,7 +82,6 @@ export class TokenService {
     const verified = this.verifyToken(refreshToken, TokenType.RefreshToken);
     const user: UserModel = await this.userService.getUserByUsername(
       verified.email,
-      verified.type,
     );
 
     const payload: JwtPayload = {

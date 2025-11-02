@@ -2,16 +2,14 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   IsEmail,
   IsNotEmpty,
-  IsOptional,
   IsString,
-  IsUUID,
-  MinLength,
+  MinLength
 } from 'class-validator';
 
 export class LoginDto {
   @IsNotEmpty()
   @ApiProperty({
-    example: 'test',
+    example: 'test@gmail.com',
   })
   @IsEmail()
   readonly email: string;
@@ -23,13 +21,6 @@ export class LoginDto {
   @MinLength(4)
   readonly password: string;
 
-  @ApiProperty({
-    example: 'test',
-    required: true,
-  })
-  @IsUUID()
-  @IsOptional()
-  readonly token: string;
 }
 
 export class RegisterDto {
@@ -61,11 +52,4 @@ export class RegisterDto {
   @MinLength(4)
   readonly password: string;
 
-  @ApiProperty({
-    example: 'test',
-    required: true,
-  })
-  @IsUUID()
-  @IsOptional()
-  readonly token: string;
 }

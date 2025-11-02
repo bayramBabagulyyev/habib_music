@@ -1,7 +1,5 @@
-import { responseMessage } from '@common/http/custom.response';
-import { Pagination, PaginationRequest } from '@common/libs/pagination';
-
-import { UserType } from '@common/enums';
+import { responseMessage } from '@common/http';
+import { UserModel } from '@db/models';
 import {
   ConflictException,
   Inject,
@@ -9,15 +7,16 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
-import { UUID } from 'crypto';
-import dayjs from 'dayjs';
+import type { UUID } from 'crypto';
 import { I18nContext } from 'nestjs-i18n';
 import { Op } from 'sequelize';
+import { UserType } from '../../../common/enums/user-type.enum';
+import { Pagination, type PaginationRequest } from '../../../common/libs/pagination';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UserQueryDto } from '../dto/query-user.dto';
+import { ResponseUserDto } from '../dto/response-user.dto';
 import { UpdateProfileDto } from '../dto/update-profile.dto';
 import { UserMapper } from '../mappers/user.mapper';
-import { UserModel } from '../models/user.model';
 
 @Injectable()
 export class UsersService {
@@ -37,22 +36,24 @@ export class UsersService {
       if (beforeCreate) throw new ConflictException('Username already exist');
       const newUser = await this.userRepo.create({
         email: dto.email,
-        phoneNumber: dto.phoneNumber,
         fullName: dto.fullName,
         password: hashedPassword,
         isSuper: dto.isSuper,
         notify: dto.notify,
         isDeleted: false,
         type: dto.isSuper ? UserType.ADMIN : UserType.USER,
-      } as any);
+      });
 
-      return responseMessage({ action: 'create', data: newUser, i18n });
+      return newUser;
     } catch (error) {
+      if (error instanceof ConflictException) {
+        throw new ConflictException('User already exists');
+      }
       throw error;
     }
   }
 
-  async findAll(pagination: PaginationRequest, _query: UserQueryDto) {
+  async findAll(pagination: PaginationRequest<UserQueryDto>, _query: UserQueryDto) {
     const { limit, skip, page, orderDirection } = pagination;
     const { orderBy } = pagination;
     const where: any = {};
@@ -64,32 +65,22 @@ export class UsersService {
       ];
     }
 
-    if (_query.birthday) {
-      const startDate = dayjs(_query.birthday)
-        .startOf('day')
-        .format('YYYY-MM-DD HH:mm:ss');
-      const endDate = dayjs(_query.birthday)
-        .endOf('day')
-        .format('YYYY-MM-DD HH:mm:ss');
-      where.birthday = { [Op.between]: [startDate, endDate] };
-    }
-
-    if (_query.admin !== undefined) {
-      where.type = _query.admin === 'true' ? UserType.ADMIN : UserType.USER;
-    }
-
     const { rows, count } = await this.userRepo.findAndCountAll({
       where: where,
       limit: limit,
       offset: skip,
       include: [],
-      order: [[orderBy, orderDirection]],
+      order: orderBy && orderDirection ? [[orderBy, orderDirection]] : undefined,
     });
     const mapped = await Promise.all(
       rows.map(async (user) => await UserMapper.toClient(user)),
     );
 
-    return Pagination.of({ limit, page, skip, orderBy, orderDirection }, count, mapped);
+    return Pagination.of<any, ResponseUserDto>(
+      pagination,
+      count,
+      mapped,
+    );
   }
 
   async getUserByUsername(
@@ -99,7 +90,7 @@ export class UsersService {
     return await this.userRepo.findOne({
       where: {
         email: email,
-        type: type ? type : UserType.USER,
+        type: type ? type : UserType.ADMIN,
         isDeleted: false,
       },
       include: [],
@@ -142,7 +133,7 @@ export class UsersService {
     await user.update({
       fullName: dto.fullName ?? user.fullName,
       password: hashedPassword,
-      notify: dto.notify ?? user.notify,
+
     });
     return responseMessage({ action: 'update', data: user, i18n });
   }
