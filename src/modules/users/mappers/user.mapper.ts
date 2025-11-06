@@ -7,8 +7,8 @@ export class UserMapper {
     dto.id = model.id ?? null;
     dto.createdAt = model.createdAt ?? null;
     dto.updatedAt = model.updatedAt ?? null;
-    dto.email = model.email ?? null;
-    dto.fullName = model.fullName ?? null;
+    dto.email = model.dataValues.email ?? null;
+    dto.fullName = model.dataValues.fullName ?? null;
     return dto;
   }
 }

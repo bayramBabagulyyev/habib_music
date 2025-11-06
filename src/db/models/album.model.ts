@@ -1,10 +1,13 @@
 import {
+  BelongsTo,
   Column,
   DataType,
+  ForeignKey,
   HasMany,
   Model,
   Table
 } from 'sequelize-typescript';
+import { FileModel } from './files.model';
 import { MediaModel } from './medias.model';
 
 @Table({ tableName: 'albums' })
@@ -22,5 +25,11 @@ export class AlbumModel extends Model<AlbumModel> {
   @HasMany(() => MediaModel)
   medias: MediaModel[]
 
+  @BelongsTo(() => FileModel, { as: 'file', foreignKey: 'fileId' })
+  file: FileModel;
+
+  @ForeignKey(() => FileModel)
+  @Column({ type: DataType.INTEGER, allowNull: false })
+  fileId: number;
 
 }

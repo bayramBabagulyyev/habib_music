@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsOptional, IsString } from "class-validator";
+import { Type } from "class-transformer";
+import { IsNumber, IsOptional, IsString } from "class-validator";
 
 export class CreateAlbumDto {
 
@@ -16,5 +17,11 @@ export class CreateAlbumDto {
     @IsString()
     @IsOptional()
     nameRu: string;
+
+    @ApiProperty({ type: 'number', required: true })
+    @IsOptional()
+    @Type(() => Number)
+    @IsNumber()
+    fileId: number;
 
 }

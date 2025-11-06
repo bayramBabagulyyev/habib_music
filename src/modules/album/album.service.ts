@@ -1,6 +1,6 @@
 import { PaginationDto } from '@common/global-dto';
 import { Pagination, PaginationRequest } from '@common/libs/pagination';
-import { AlbumModel } from '@db/models';
+import { AlbumModel, FileModel } from '@db/models';
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Op, WhereOptions } from 'sequelize';
 import { CreateAlbumDto } from './dto/create-album.dto';
@@ -28,6 +28,7 @@ export class AlbumService {
 
     const { rows, count } = await this.albumModel.findAndCountAll({
       where: where,
+      include: [{ model: FileModel, as: 'file' }],
       limit: limit,
       offset: skip,
       order: [[orderBy, orderDirection]],
@@ -37,7 +38,9 @@ export class AlbumService {
   }
 
   findOne(id: number) {
-    const album = this.albumModel.findByPk(id);
+    const album = this.albumModel.findByPk(id, {
+      include: [{ model: FileModel, as: 'file' }],
+    });
     if (!album) {
       throw new NotFoundException('Album not found');
     }
