@@ -1,6 +1,6 @@
 import { PaginationDto } from '@common/global-dto';
 import { Pagination, PaginationRequest } from '@common/libs/pagination';
-import { GenreModel } from '@db/models';
+import { FileModel, GenreModel } from '@db/models';
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Op, WhereOptions } from 'sequelize';
 import { CreateGenreDto } from './dto/create-genre.dto';
@@ -25,6 +25,7 @@ export class GenreService {
 
     const { rows, count } = await this.genre.findAndCountAll({
       where: where,
+      include: [{ model: FileModel, as: 'file' }],
       limit: limit,
       offset: skip,
       order: [[orderBy, orderDirection]],
@@ -34,7 +35,9 @@ export class GenreService {
   }
 
   findOne(id: number) {
-    const genre = this.genre.findByPk(id);
+    const genre = this.genre.findByPk(id, {
+      include: [{ model: FileModel, as: 'file' }],
+    });
     if (!genre) {
       throw new NotFoundException('Genre not found');
     }

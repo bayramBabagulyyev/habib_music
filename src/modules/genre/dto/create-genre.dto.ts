@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsOptional, IsString } from "class-validator";
+import { Type } from "class-transformer";
+import { IsNumber, IsOptional, IsString } from "class-validator";
 
 export class CreateGenreDto {
     @ApiProperty({ example: "Genre name in Turkmen", description: "Name of the Genre in Turkmen language" })
@@ -15,4 +16,11 @@ export class CreateGenreDto {
     @IsString()
     @IsOptional()
     nameRu: string;
+
+
+    @ApiProperty({ type: 'number', required: true })
+    @IsOptional()
+    @Type(() => Number)
+    @IsNumber()
+    fileId: number;
 }
