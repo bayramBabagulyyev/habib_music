@@ -39,6 +39,8 @@ async function music() {
   app.enableCors({
     origin: '*',
     credentials: false,
+    methods: ['PATCH', 'OPTIONS', 'GET', 'POST', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin', 'X-Requested-With', 'User-Agent', 'Access-Control-Allow-Origin']
   });
 
   // app.useGlobalFilters(new HttpExceptionFilter());
