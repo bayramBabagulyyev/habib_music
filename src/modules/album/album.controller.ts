@@ -1,6 +1,7 @@
 import { TOKEN_NAME } from '@common/constants';
 import { PaginationDto } from '@common/global-dto';
 import { PaginationParams, type PaginationRequest } from '@common/libs/pagination';
+import { SkipAuth } from '@modules/auth';
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { AlbumService } from './album.service';
@@ -17,6 +18,7 @@ export class AlbumController {
     return this.albumService.create(createAlbumDto);
   }
 
+  @SkipAuth()
   @Get()
   findAll(
     @PaginationParams() pagination: PaginationRequest<PaginationDto>,
@@ -25,6 +27,7 @@ export class AlbumController {
     return this.albumService.findAll(pagination, query);
   }
 
+  @SkipAuth()
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.albumService.findOne(+id);
