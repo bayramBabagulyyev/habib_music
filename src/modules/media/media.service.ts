@@ -288,27 +288,27 @@ export class MediaService {
       descriptionTk: dto.descriptionTk,
       descriptionEn: dto.descriptionEn,
       descriptionRu: dto.descriptionRu,
-      albumId: dto.albumId,
+      albumId: dto.albumId
     });
 
     // Update audio if provided
-    if (dto.audioId || dto.thumbnailId) {
+    if (dto.audioId) {
       const audioRecord = await this.audio.findOne({ where: { mediaId: id } });
       if (audioRecord) {
         await audioRecord.update({
           audioId: dto.audioId ?? audioRecord.audioId,
-          thumbnailId: dto.thumbnailId ?? audioRecord.thumbnailId,
+          thumbnailId: dto.thumbnailId ? audioRecord.thumbnailId : audioRecord.thumbnailId,
         });
       }
     }
 
     // Update video if provided
-    if (dto.videoId || dto.thumbnailId) {
+    if (dto.videoId) {
       const videoRecord = await this.video.findOne({ where: { mediaId: id } });
       if (videoRecord) {
         await videoRecord.update({
           videoId: dto.videoId ?? videoRecord.videoId,
-          thumbnailId: dto.thumbnailId ?? videoRecord.thumbnailId,
+          thumbnailId: dto.thumbnailId ? videoRecord.thumbnailId : videoRecord.thumbnailId,
         });
       }
     }
