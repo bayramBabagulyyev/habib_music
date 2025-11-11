@@ -22,6 +22,9 @@ export class FilesService {
 
       // process each uploaded file: compress and add logo at top-right
       for (const file of files) {
+        if (!file.mimetype.startsWith('image')) {
+          continue;
+        }
         const inputPath = file.path;
         try {
           const img = sharp(inputPath);
@@ -31,7 +34,7 @@ export class FilesService {
           // resize logo to ~15% of image width
           const logoBuffer = await sharp(logoPath)
             .resize(Math.max(1, Math.round(width * 0.15)))
-            .png()
+            .webp()
             .toBuffer();
           const logoMeta = await sharp(logoBuffer).metadata();
           const left = Math.max(0, width - (logoMeta.width || 0) - 10);
