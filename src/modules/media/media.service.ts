@@ -5,6 +5,7 @@ import { AlbumModel, AudioModel, FileModel, GenreMediaModel, GenreModel, MediaMo
 import { JwtPayload } from '@modules/auth/dtos';
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Op, WhereOptions } from 'sequelize';
+import { ActionMedia } from './dto/action-media.dto';
 import { CreateMediaDto } from './dto/create-media.dto';
 import { QueryMediaDto } from './dto/query-media.dto';
 import { UpdateMediaDto } from './dto/update-media.dto';
@@ -292,7 +293,7 @@ export class MediaService {
     });
 
     // Update audio if provided
-    if (dto.audioId) {
+    if (dto.audioId && Number(dto.audioId) > 0) {
       const audioRecord = await this.audio.findOne({ where: { mediaId: id } });
       if (audioRecord) {
         await audioRecord.update({
@@ -300,13 +301,13 @@ export class MediaService {
           thumbnailId: dto.thumbnailId ? audioRecord.thumbnailId : audioRecord.thumbnailId,
         });
       }
-    } if (dto.audioId === null) {
+    } else if (dto.audioId === null) {
       // If audioId is explicitly set to null, remove the audio record
       await this.audio.destroy({ where: { mediaId: id } });
     }
 
     // Update video if provided
-    if (dto.videoId) {
+    if (dto.videoId && Number(dto.videoId) > 0) {
       const videoRecord = await this.video.findOne({ where: { mediaId: id } });
       if (videoRecord) {
         await videoRecord.update({
@@ -362,5 +363,41 @@ export class MediaService {
 
     await media.destroy();
     return responseMessage({ action: 'delete', data: null });
+  }
+
+  async actionAudio(id: number, lang: Lang, data: ActionMedia) {
+    const audio = await this.audio.findByPk(id);
+    if (!audio) {
+      throw new NotFoundException("Audio not found");
+    };
+
+    const newLikeCount = audio.likeCount ?? +0 + +data.like;
+    const newListenCount = audio.listenCount ?? +0 + +data.listen;
+    const newDownloadCount = audio.downloadCount ?? +0 + +data.download;
+
+    await audio.update({
+      likeCount: newLikeCount,
+      listenCount: newListenCount,
+      downloadCount: newDownloadCount
+    })
+    return
+  }
+
+  async actionVideo(id: number, lang: Lang, data: ActionMedia) {
+    const video = await this.video.findByPk(id);
+    if (!video) {
+      throw new NotFoundException("Video not found");
+    };
+
+    const newLikeCount = video.likeCount ?? +0 + +data.like;
+    const newListenCount = video.listenCount ?? +0 + +data.listen;
+    const newDownloadCount = video.downloadCount ?? +0 + +data.download;
+
+    await video.update({
+      likeCount: newLikeCount,
+      listenCount: newListenCount,
+      downloadCount: newDownloadCount
+    })
+    return
   }
 }

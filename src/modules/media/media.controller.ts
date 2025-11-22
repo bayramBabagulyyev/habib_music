@@ -14,6 +14,7 @@ import {
   Query
 } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { ActionMedia } from './dto/action-media.dto';
 import { CreateMediaDto } from './dto/create-media.dto';
 import { QueryMediaDto } from './dto/query-media.dto';
 import { UpdateMediaDto } from './dto/update-media.dto';
@@ -79,5 +80,25 @@ export class MediaController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.mediaService.remove(+id);
+  }
+
+  @SkipAuth()
+  @Post('audio-listen/:audioId')
+  likeSong(
+    @Param('audioId') id: string,
+    @Headers('lang') lang: Lang,
+    @Body() data: ActionMedia
+  ) {
+    return this.mediaService.actionAudio(+id, lang, data);
+  }
+
+  @SkipAuth()
+  @Post('video-listen/:videoId')
+  likeVideo(
+    @Param('videoId') id: string,
+    @Headers('lang') lang: Lang,
+    @Body() data: ActionMedia
+  ) {
+    return this.mediaService.actionVideo(+id, lang, data);
   }
 }
