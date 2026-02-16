@@ -39,6 +39,7 @@ export class MediaService {
         mediaId: newMedia.id,
         audioId: dto.audioId,
         thumbnailId: dto.thumbnailId,
+        lyrics: dto.audioLyrics,
       } as AudioModel);
     }
 
@@ -47,6 +48,7 @@ export class MediaService {
         mediaId: newMedia.id,
         videoId: dto.videoId,
         thumbnailId: dto.thumbnailId,
+        lyrics: dto.videoLyrics,
       } as VideoModel);
     }
 
@@ -299,6 +301,7 @@ export class MediaService {
         await audioRecord.update({
           audioId: dto.audioId ?? audioRecord.audioId,
           thumbnailId: dto.thumbnailId ? audioRecord.thumbnailId : audioRecord.thumbnailId,
+          lyrics: dto.audioLyrics ?? audioRecord.lyrics,
         });
       }
     } else if (dto.audioId === null) {
@@ -313,6 +316,7 @@ export class MediaService {
         await videoRecord.update({
           videoId: dto.videoId ?? videoRecord.videoId,
           thumbnailId: dto.thumbnailId ? videoRecord.thumbnailId : videoRecord.thumbnailId,
+          lyrics: dto.videoLyrics ?? videoRecord.lyrics,
         });
       }
     } else if (dto.videoId === null) {
@@ -370,7 +374,7 @@ export class MediaService {
     if (!audio) {
       throw new NotFoundException("Audio not found");
     };
-
+    console.log(audio.likeCount, audio.listenCount, audio.downloadCount);
     const newLikeCount = audio.likeCount ?? +0 + +data.like;
     const newListenCount = audio.listenCount ?? +0 + +data.listen;
     const newDownloadCount = audio.downloadCount ?? +0 + +data.download;

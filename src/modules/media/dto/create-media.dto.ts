@@ -63,4 +63,14 @@ export class CreateMediaDto {
     @Type(() => Number)
     @IsNumber()
     videoId?: number;
+
+    @ApiProperty({ type: 'string', required: false })
+    @IsOptional()
+    @IsString()
+    audioLyrics?: string;
+
+    @ApiProperty({ type: 'string', required: false })
+    @IsOptional()
+    @IsString()
+    videoLyrics?: string;
 }
