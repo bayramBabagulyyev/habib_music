@@ -12,6 +12,7 @@ import { FilesModule } from './modules/files/files.module';
 import { GenreModule } from './modules/genre/genre.module';
 import { MediaModule } from './modules/media/media.module';
 import { AboutModule } from '@modules/about/about.module';
+import { StatisticsModule } from './modules/statistics/statistics.module';
 
 @Module({
   imports: [
@@ -33,8 +34,8 @@ import { AboutModule } from '@modules/about/about.module';
     GenreModule,
     FilesModule,
     MediaModule,
-    AboutModule
-
+    AboutModule,
+    StatisticsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

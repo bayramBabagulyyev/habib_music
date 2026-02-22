@@ -42,6 +42,13 @@ export class UserModel extends Model {
   isDeleted: boolean;
 
   @Column({
+    type: DataType.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
+  })
+  notify: boolean;
+
+  @Column({
     type: DataType.ENUM(...Object.values(UserType)),
     allowNull: false,
     defaultValue: UserType.USER,

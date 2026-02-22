@@ -31,7 +31,6 @@ export class FilesController {
       fileFilter: fileFilter,
     }),
   )
-  @Post()
   create(@Body() createFileDto: CreateFilesDto,
     @UploadedFiles() files: MulterFile[],) {
     return this.filesService.create(createFileDto, files);

@@ -44,7 +44,11 @@ export class AboutService {
     const { limit, skip, page, orderBy, orderDirection } = pagination;
     const where: any = {};
     if (query.search) {
-      where[Op.or] = [{ title: { [Op.iLike]: `%${query.search}%` } }];
+      where[Op.or] = [
+        { title_tk: { [Op.iLike]: `%${query.search}%` } },
+        { title_en: { [Op.iLike]: `%${query.search}%` } },
+        { title_ru: { [Op.iLike]: `%${query.search}%` } },
+      ];
     }
     const { rows, count } = await this.about.findAndCountAll({
       where: where,

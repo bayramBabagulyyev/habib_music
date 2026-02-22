@@ -6,10 +6,11 @@ import { FileModel } from "./files.model";
 import { GenreMediaModel } from "./genre-media.model";
 import { GenreModel } from "./genre.model";
 import { MediaModel } from "./medias.model";
+import { ReelsModel } from "./reels.model";
 import { UserModel } from "./user.model";
 import { VideoModel } from "./videos.model";
 export {
     AboutModel, AlbumModel, AudioModel, BannerModel, FileModel, GenreMediaModel,
-    GenreModel, MediaModel, UserModel, VideoModel
+    GenreModel, MediaModel, ReelsModel, UserModel, VideoModel
 };
 

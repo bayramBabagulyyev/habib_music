@@ -19,7 +19,7 @@ import { AboutService } from './about.service';
 import { CreateAboutDto } from './dto/create-about.dto';
 import { QueryAboutDto } from './dto/query.about.dto';
 
-ApiTags('About')
+@ApiTags('About')
 @ApiBearerAuth(TOKEN_NAME)
 @Controller('about')
 export class AboutController {

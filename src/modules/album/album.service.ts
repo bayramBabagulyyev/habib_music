@@ -37,15 +37,14 @@ export class AlbumService {
     return Pagination.of<PaginationDto, AlbumModel>(pagination, count, rows);
   }
 
-  findOne(id: number) {
-    const album = this.albumModel.findByPk(id, {
+  async findOne(id: number) {
+    const album = await this.albumModel.findByPk(id, {
       include: [{ model: FileModel, as: 'file' }],
     });
     if (!album) {
       throw new NotFoundException('Album not found');
     }
     return album;
-
   }
 
   async update(id: number, updateAlbumDto: CreateAlbumDto) {

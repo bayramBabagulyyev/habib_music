@@ -20,7 +20,11 @@ export class GenreService {
     const { limit, skip, orderBy, orderDirection } = pagination;
     const where: WhereOptions<GenreModel> = {};
     if (query.search) {
-      where[Op.or] = [{ title_tk: { [Op.iLike]: `%${query.search}%` } }];
+      where[Op.or] = [
+        { nameTk: { [Op.iLike]: `%${query.search}%` } },
+        { nameEn: { [Op.iLike]: `%${query.search}%` } },
+        { nameRu: { [Op.iLike]: `%${query.search}%` } },
+      ];
     }
 
     const { rows, count } = await this.genre.findAndCountAll({
@@ -34,8 +38,8 @@ export class GenreService {
     return Pagination.of<PaginationDto, GenreModel>(pagination, count, rows);
   }
 
-  findOne(id: number) {
-    const genre = this.genre.findByPk(id, {
+  async findOne(id: number) {
+    const genre = await this.genre.findByPk(id, {
       include: [{ model: FileModel, as: 'file' }],
     });
     if (!genre) {
