@@ -37,7 +37,7 @@ export class ImageMapper {
   public static toDto(entity: FileModel): FileResponseDto {
     const dto = new FileResponseDto();
     dto.id = entity.id as number;
-    dto.file = entity && entity.file ? this.API_BASE_URL + '/' + entity.file : "";
+    dto.file = entity && entity.dataValues.file ? this.API_BASE_URL + '/' + entity.dataValues.file : "";
     dto.duration = entity.duration;
     dto.fileType = entity.fileType;
     return dto;

@@ -1,7 +1,8 @@
 import { CommonDto } from '@common/global-dto';
+import { FileResponseDto } from '@common/global-dto/response-file.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsNumber, IsString } from 'class-validator';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class ResponseAboutDto extends CommonDto {
 
@@ -47,5 +48,7 @@ export class ResponseAboutDto extends CommonDto {
   @IsString()
   text_ru: string
 
-  // file: any
+  @ApiProperty({ type: () => FileResponseDto, required: false })
+  @IsOptional()
+  avatar: FileResponseDto | null;
 }

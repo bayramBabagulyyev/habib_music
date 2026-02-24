@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateAboutDto {
   @ApiProperty({ type: 'string', required: true })
@@ -38,9 +39,10 @@ export class CreateAboutDto {
   @IsString()
   job: string;
 
-  // @ApiProperty({ type: 'number', required: true })
-  // @Type(() => Number)
-  // @IsNumber()
-  // fi: string;
+  @ApiProperty({ type: 'number', required: false })
+  @Type(() => Number)
+  @IsNumber()
+  @IsOptional()
+  avatarId: number;
 
 }

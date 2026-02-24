@@ -1,4 +1,5 @@
-import { Column, DataType, Index, Model, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, ForeignKey, Index, Model, Table } from 'sequelize-typescript';
+import { FileModel } from './files.model';
 
 @Table({ tableName: 'about' })
 export class AboutModel extends Model<AboutModel> {
@@ -28,5 +29,12 @@ export class AboutModel extends Model<AboutModel> {
 
   @Column({ type: DataType.STRING, allowNull: true })
   job: string;
+
+  @BelongsTo(() => FileModel, { as: 'avatar', foreignKey: 'avatarId' })
+  avatar: FileModel;
+
+  @ForeignKey(() => FileModel)
+  @Column({ type: DataType.INTEGER, allowNull: true })
+  avatarId: number;
 
 }

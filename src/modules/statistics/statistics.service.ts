@@ -1,6 +1,6 @@
 import { AlbumModel, AudioModel, ReelsModel, VideoModel } from '@db/models';
 import { Inject, Injectable } from '@nestjs/common';
-import { Sequelize, fn, col, literal } from 'sequelize';
+import { Sequelize, col, fn, literal } from 'sequelize';
 import { QueryStatisticsDto } from './dto/query-statistics.dto';
 
 @Injectable()

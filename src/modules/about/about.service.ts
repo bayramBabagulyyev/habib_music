@@ -1,7 +1,7 @@
 import { Lang, UserType } from '@common/enums';
 import { responseMessage } from '@common/http';
 import { Pagination, PaginationRequest } from '@common/libs/pagination';
-import { AboutModel } from '@db/models';
+import { AboutModel, FileModel } from '@db/models';
 import { JwtPayload } from '@modules/auth/dtos';
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Op } from 'sequelize';
@@ -31,7 +31,8 @@ export class AboutService {
       text_en: dto.text_en,
       text_ru: dto.text_ru,
       job: dto.job,
-      artistName: dto.artistName
+      artistName: dto.artistName,
+      avatarId: dto.avatarId,
     } as AboutModel);
     return responseMessage({ action: 'create', data: newAbout });
   }
@@ -52,6 +53,7 @@ export class AboutService {
     }
     const { rows, count } = await this.about.findAndCountAll({
       where: where,
+      include: [{ model: FileModel, as: 'avatar' }],
       limit: limit,
       offset: skip,
       order: [[orderBy, orderDirection]],
@@ -63,7 +65,9 @@ export class AboutService {
   }
 
   async findOne(id: number, lang: Lang, user: JwtPayload) {
-    const about = await this.about.findByPk(id);
+    const about = await this.about.findByPk(id, {
+      include: [{ model: FileModel, as: 'avatar' }],
+    });
     if (!about) {
       throw new NotFoundException('About not found');
     }
@@ -93,7 +97,8 @@ export class AboutService {
       text_en: dto.text_en,
       text_ru: dto.text_ru,
       artistName: dto.artistName,
-      job: dto.job
+      job: dto.job,
+      avatarId: dto.avatarId,
     });
     const mapped = AboutMapper.toClient(about, Lang.TK);
     return responseMessage({ action: 'update', data: mapped });

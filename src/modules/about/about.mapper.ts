@@ -1,5 +1,6 @@
 import { Lang } from '@common/enums';
 import { AboutModel } from '@db/models';
+import { ImageMapper } from '@modules/files/file.mapper';
 import { ResponseAboutDto } from './dto/response-about.dto';
 
 export class AboutMapper {
@@ -20,6 +21,7 @@ export class AboutMapper {
     dto.text_ru = model.dataValues.text_ru;
     dto.artistName = model.dataValues.artistName;
     dto.job = model.dataValues.job;
+    dto.avatar = model.dataValues.avatar ? ImageMapper.toDto(model.dataValues.avatar) : null;
     return dto;
   }
 }
