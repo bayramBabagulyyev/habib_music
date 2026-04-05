@@ -48,7 +48,7 @@ export class VideoModel extends Model<VideoModel> {
   @Column({ type: DataType.INTEGER, allowNull: false })
   videoId: number;
 
-  @Column({ type: DataType.INTEGER, allowNull: false, defaultValue: 0 })
+  @Column({ type: DataType.TEXT, allowNull: false, defaultValue: '' })
   lyrics: string
 
 }

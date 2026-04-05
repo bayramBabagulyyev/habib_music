@@ -48,7 +48,7 @@ export class AudioModel extends Model<AudioModel> {
   @Column({ type: DataType.INTEGER, allowNull: false })
   audioId: number;
 
-  @Column({ type: DataType.INTEGER, allowNull: false, defaultValue: 0 })
+  @Column({ type: DataType.TEXT, allowNull: false, defaultValue: '' })
   lyrics: string
 
 }
