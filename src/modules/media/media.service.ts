@@ -31,6 +31,7 @@ export class MediaService {
       descriptionEn: dto.descriptionEn,
       descriptionRu: dto.descriptionRu,
       albumId: dto.albumId,
+      comingSoon: dto.comingSoon ?? false,
     } as MediaModel);
 
     // Create audio or video record if IDs are provided
@@ -80,7 +81,7 @@ export class MediaService {
     user?: JwtPayload,
   ) {
     const { limit, skip, orderBy, orderDirection } = pagination;
-    const where: WhereOptions<MediaModel> = {};
+    const where: WhereOptions<MediaModel> = { comingSoon: false };
 
     if (query.search) {
       where[Op.or] = [
@@ -145,7 +146,7 @@ export class MediaService {
   ) {
     const { limit, skip, orderBy, orderDirection } = pagination;
     const where: WhereOptions<VideoModel> = {};
-    const whereMedia: WhereOptions<MediaModel> = {};
+    const whereMedia: WhereOptions<MediaModel> = { comingSoon: false };
 
     if (query.search) {
       whereMedia[Op.or] = [
@@ -203,7 +204,7 @@ export class MediaService {
   ) {
     const { limit, skip, orderBy, orderDirection } = pagination;
     const where: WhereOptions<AudioModel> = {};
-    const whereMedia: WhereOptions<MediaModel> = {};
+    const whereMedia: WhereOptions<MediaModel> = { comingSoon: false };
 
     if (query.search) {
       whereMedia[Op.or] = [
@@ -255,6 +256,35 @@ export class MediaService {
 
 
 
+  async findLatestComingSoon(lang: Lang) {
+    const media = await this.media.findOne({
+      where: { comingSoon: true },
+      order: [['createdAt', 'DESC']],
+      include: [
+        { model: AlbumModel, as: 'album' },
+        {
+          model: AudioModel,
+          as: 'audio',
+          include: [
+            { model: FileModel, as: 'thumbnail' },
+            { model: FileModel, as: 'audio' },
+          ],
+        },
+        {
+          model: VideoModel,
+          as: 'video',
+          include: [
+            { model: FileModel, as: 'thumbnail' },
+            { model: FileModel, as: 'video' },
+          ],
+        },
+        { model: GenreModel, as: 'genres' },
+      ],
+    });
+
+    return responseMessage({ action: 'success', data: media });
+  }
+
   async findOne(id: number, lang: Lang) {
     const media = await this.media.findByPk(id, {
       include: [
@@ -291,7 +321,8 @@ export class MediaService {
       descriptionTk: dto.descriptionTk,
       descriptionEn: dto.descriptionEn,
       descriptionRu: dto.descriptionRu,
-      albumId: dto.albumId
+      albumId: dto.albumId,
+      comingSoon: dto.comingSoon ?? false,
     });
 
     // Update audio if provided

@@ -64,6 +64,12 @@ export class MediaController {
   }
 
   @SkipAuth()
+  @Get('coming-soon')
+  findLatestComingSoon(@Headers('lang') lang: Lang) {
+    return this.mediaService.findLatestComingSoon(lang);
+  }
+
+  @SkipAuth()
   @Get(':id')
   findOne(
     @Param('id') id: string,

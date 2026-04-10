@@ -4,14 +4,13 @@ import {
   DataType,
   ForeignKey,
   Model,
-  Table
+  Table,
 } from 'sequelize-typescript';
 import { FileModel } from './files.model';
 import { MediaModel } from './medias.model';
 
 @Table({ tableName: 'videos' })
 export class VideoModel extends Model<VideoModel> {
-
   @BelongsTo(() => FileModel, { as: 'thumbnail', foreignKey: 'thumbnailId' })
   thumbnail: FileModel;
 
@@ -49,6 +48,5 @@ export class VideoModel extends Model<VideoModel> {
   videoId: number;
 
   @Column({ type: DataType.TEXT, allowNull: false, defaultValue: '' })
-  lyrics: string
-
+  lyrics: string;
 }

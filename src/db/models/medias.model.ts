@@ -6,7 +6,7 @@ import {
   ForeignKey,
   HasOne,
   Model,
-  Table
+  Table,
 } from 'sequelize-typescript';
 import { AlbumModel } from './album.model';
 import { AudioModel } from './audio.model';
@@ -16,7 +16,6 @@ import { VideoModel } from './videos.model';
 
 @Table({ tableName: 'medias' })
 export class MediaModel extends Model<MediaModel> {
-
   @Column({ type: DataType.STRING, allowNull: false })
   nameTk: string;
 
@@ -51,4 +50,6 @@ export class MediaModel extends Model<MediaModel> {
   @BelongsToMany(() => GenreModel, () => GenreMediaModel)
   genres: GenreModel[];
 
+  @Column({ type: DataType.BOOLEAN, allowNull: false, defaultValue: false })
+  comingSoon: boolean;
 }

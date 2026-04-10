@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsArray, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateMediaDto {
     @ApiProperty({ type: 'string', required: true })
@@ -45,20 +45,32 @@ export class CreateMediaDto {
     genreIds?: number[];
 
     // Audio-specific fields
-    @ApiProperty({ type: 'number', required: false, description: 'Thumbnail file ID for audio' })
+    @ApiProperty({
+        type: 'number',
+        required: false,
+        description: 'Thumbnail file ID for audio',
+    })
     @IsOptional()
     @Type(() => Number)
     @IsNumber()
     thumbnailId?: number;
 
-    @ApiProperty({ type: 'number', required: false, description: 'Audio file ID' })
+    @ApiProperty({
+        type: 'number',
+        required: false,
+        description: 'Audio file ID',
+    })
     @IsOptional()
     @Type(() => Number)
     @IsNumber()
     audioId?: number;
 
     // Video-specific fields
-    @ApiProperty({ type: 'number', required: false, description: 'Video file ID' })
+    @ApiProperty({
+        type: 'number',
+        required: false,
+        description: 'Video file ID',
+    })
     @IsOptional()
     @Type(() => Number)
     @IsNumber()
@@ -73,4 +85,10 @@ export class CreateMediaDto {
     @IsOptional()
     @IsString()
     videoLyrics?: string;
+
+    @ApiProperty({ type: 'boolean', required: true })
+    @IsOptional()
+    @Type(() => Boolean)
+    @IsBoolean()
+    comingSoon: boolean;
 }
