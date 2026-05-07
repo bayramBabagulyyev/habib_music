@@ -50,5 +50,5 @@ export class ResponseAboutDto extends CommonDto {
 
   @ApiProperty({ type: () => FileResponseDto, required: false })
   @IsOptional()
-  avatar: FileResponseDto | null;
+  avatars?: FileResponseDto[];
 }

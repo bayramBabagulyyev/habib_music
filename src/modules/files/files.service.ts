@@ -2,6 +2,7 @@ import { FileHelper } from '@common/helpers/file-delete.helper';
 import { FileModel } from '@db/models';
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { join } from 'path';
+import { Op } from 'sequelize';
 import sharp from 'sharp';
 import { CreateFilesDto } from './dto/create-file.dto';
 import { ImageMapper, MulterFile } from './file.mapper';
@@ -80,11 +81,17 @@ export class FilesService {
     return ImageMapper.toDto(file);
   }
 
+  async updateForAbout(aboutId: number, fileIds: number[]) {
+    await this.file.update({ aboutId: aboutId }, { where: { id: { [Op.in]: fileIds } } });
+  }
+
   async remove(id: number) {
     const file = await this.file.findByPk(id);
+
     if (!file) {
       throw new NotFoundException('File tapylmady!');
     }
+
     FileHelper.deleteFileSilent(file.file);
     await this.file.destroy({ where: { id } });
     return;

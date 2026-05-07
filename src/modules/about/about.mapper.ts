@@ -21,7 +21,7 @@ export class AboutMapper {
     dto.text_ru = model.dataValues.text_ru;
     dto.artistName = model.dataValues.artistName;
     dto.job = model.dataValues.job;
-    dto.avatar = model.dataValues.avatar ? ImageMapper.toDto(model.dataValues.avatar) : null;
+    dto.avatars = model.dataValues.avatars?.map(each => ImageMapper.toDto(each));
     return dto;
   }
 }

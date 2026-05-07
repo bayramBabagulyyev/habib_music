@@ -2,11 +2,11 @@ import { IsOptional } from 'class-validator';
 
 export class FileResponseDto {
 
-  id: number;
+  id?: number;
 
-  file: string;
+  file?: string;
 
-  fileType: string;
+  fileType?: string;
 
   @IsOptional()
   duration?: number;

@@ -3,6 +3,7 @@ import { responseMessage } from '@common/http';
 import { Pagination, PaginationRequest } from '@common/libs/pagination';
 import { AboutModel, FileModel } from '@db/models';
 import { JwtPayload } from '@modules/auth/dtos';
+import { FilesService } from '@modules/files/files.service';
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Op } from 'sequelize';
 import { AboutMapper } from './about.mapper';
@@ -12,10 +13,11 @@ import { ResponseAboutDto } from './dto/response-about.dto';
 
 @Injectable()
 export class AboutService {
-  protected readonly sloganPath: string;
+  // protected readonly sloganPath: string;
   constructor(
     @Inject('ABOUT')
     private readonly about: typeof AboutModel,
+    private readonly fileService: FilesService,
   ) {
 
   }
@@ -32,8 +34,11 @@ export class AboutService {
       text_ru: dto.text_ru,
       job: dto.job,
       artistName: dto.artistName,
-      avatarId: dto.avatarId,
     } as AboutModel);
+
+    if (dto.avatarIds)
+      await this.fileService.updateForAbout(newAbout.id, dto.avatarIds)
+
     return responseMessage({ action: 'create', data: newAbout });
   }
 
@@ -53,7 +58,7 @@ export class AboutService {
     }
     const { rows, count } = await this.about.findAndCountAll({
       where: where,
-      include: [{ model: FileModel, as: 'avatar' }],
+      include: [{ model: FileModel }],
       limit: limit,
       offset: skip,
       order: [[orderBy, orderDirection]],
@@ -66,7 +71,7 @@ export class AboutService {
 
   async findOne(id: number, lang: Lang, user: JwtPayload) {
     const about = await this.about.findByPk(id, {
-      include: [{ model: FileModel, as: 'avatar' }],
+      include: [{ model: FileModel, }],
     });
     if (!about) {
       throw new NotFoundException('About not found');
@@ -98,8 +103,11 @@ export class AboutService {
       text_ru: dto.text_ru,
       artistName: dto.artistName,
       job: dto.job,
-      avatarId: dto.avatarId,
     });
+
+    if (dto.avatarIds)
+      await this.fileService.updateForAbout(id, dto.avatarIds)
+
     const mapped = AboutMapper.toClient(about, Lang.TK);
     return responseMessage({ action: 'update', data: mapped });
   }
