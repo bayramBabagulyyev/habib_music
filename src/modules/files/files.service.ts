@@ -23,7 +23,7 @@ export class FilesService {
 
       // process each uploaded file: compress and add logo at top-right
       for (const file of files) {
-        if (!file.mimetype.startsWith('image')) {
+        if (!file.mimetype.startsWith('image') || dto.convert === 0) {
           continue;
         }
         const inputPath = file.path;
