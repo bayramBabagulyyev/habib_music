@@ -1,7 +1,8 @@
 import { PaginationDto } from '@common/global-dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
+import { VideoTypeEnum } from '../enums/video-type.enum';
 
 export class QueryMediaDto extends PaginationDto {
     @ApiProperty({ type: 'number', required: false })
@@ -27,5 +28,10 @@ export class QueryMediaDto extends PaginationDto {
     @Type(() => String)
     @IsString()
     audio?: boolean;
+
+    @ApiProperty({ enum: VideoTypeEnum, required: false })
+    @IsOptional()
+    @IsEnum(VideoTypeEnum)
+    type?: VideoTypeEnum;
 
 }

@@ -1,3 +1,4 @@
+import { VideoTypeEnum } from '@modules/media/enums/video-type.enum';
 import {
   BelongsTo,
   Column,
@@ -12,41 +13,48 @@ import { MediaModel } from './medias.model';
 @Table({ tableName: 'videos' })
 export class VideoModel extends Model<VideoModel> {
   @BelongsTo(() => FileModel, { as: 'thumbnail', foreignKey: 'thumbnailId' })
-  thumbnail: FileModel;
+  thumbnail!: FileModel;
 
   @ForeignKey(() => FileModel)
   @Column({ type: DataType.INTEGER, allowNull: false })
-  thumbnailId: number;
+  thumbnailId!: number;
 
   @Column({ type: DataType.INTEGER, allowNull: false, defaultValue: 0 })
-  likeCount: number;
+  likeCount?: number;
 
   @Column({ type: DataType.INTEGER, allowNull: false, defaultValue: 0 })
-  dislikeCount: number;
+  dislikeCount?: number;
 
   @Column({ type: DataType.INTEGER, allowNull: false, defaultValue: 0 })
-  listenCount: number;
+  listenCount?: number;
 
   @Column({ type: DataType.INTEGER, allowNull: false, defaultValue: 0 })
-  downloadCount: number;
+  downloadCount?: number;
 
   @Column({ type: DataType.INTEGER, allowNull: false, defaultValue: 0 })
-  shareCount: number;
+  shareCount?: number;
 
   @BelongsTo(() => MediaModel)
-  media: MediaModel;
+  media!: MediaModel;
 
   @ForeignKey(() => MediaModel)
   @Column({ type: DataType.INTEGER, allowNull: false })
-  mediaId: number;
+  mediaId!: number;
 
   @BelongsTo(() => FileModel, { as: 'video', foreignKey: 'videoId' })
-  video: FileModel;
+  video!: FileModel;
 
   @ForeignKey(() => FileModel)
   @Column({ type: DataType.INTEGER, allowNull: false })
-  videoId: number;
+  videoId!: number;
 
   @Column({ type: DataType.TEXT, allowNull: false, defaultValue: '' })
-  lyrics: string;
+  lyrics?: string;
+
+  @Column({
+    type: DataType.ENUM(...Object.values(VideoTypeEnum)),
+    allowNull: false,
+    defaultValue: VideoTypeEnum.video,
+  })
+  type!: VideoTypeEnum
 }

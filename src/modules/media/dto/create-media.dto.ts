@@ -1,11 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsArray, IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsBoolean, IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
+import { VideoTypeEnum } from '../enums/video-type.enum';
 
 export class CreateMediaDto {
     @ApiProperty({ type: 'string', required: true })
     @IsString()
-    nameTk: string;
+    nameTk!: string;
 
     @ApiProperty({ type: 'string', required: false })
     @IsOptional()
@@ -19,7 +20,7 @@ export class CreateMediaDto {
 
     @ApiProperty({ type: 'string', required: true })
     @IsString()
-    descriptionTk: string;
+    descriptionTk!: string;
 
     @ApiProperty({ type: 'string', required: false })
     @IsOptional()
@@ -90,5 +91,10 @@ export class CreateMediaDto {
     @IsOptional()
     @Type(() => Boolean)
     @IsBoolean()
-    comingSoon: boolean;
+    comingSoon?: boolean;
+
+    @ApiProperty({ type: 'string', enum: VideoTypeEnum, required: false })
+    @IsOptional()
+    @IsEnum(VideoTypeEnum)
+    videoType?: VideoTypeEnum
 }

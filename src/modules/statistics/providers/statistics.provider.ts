@@ -1,4 +1,4 @@
-import { AlbumModel, AudioModel, ReelsModel, VideoModel } from '@db/models';
+import { AlbumModel, AudioModel, VideoModel } from '@db/models';
 
 export const statisticsProvider = [
     {
@@ -12,9 +12,5 @@ export const statisticsProvider = [
     {
         provide: 'ALBUM',
         useValue: AlbumModel,
-    },
-    {
-        provide: 'REELS',
-        useValue: ReelsModel,
     },
 ];

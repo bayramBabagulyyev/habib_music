@@ -9,6 +9,7 @@ import { ActionMedia } from './dto/action-media.dto';
 import { CreateMediaDto } from './dto/create-media.dto';
 import { QueryMediaDto } from './dto/query-media.dto';
 import { UpdateMediaDto } from './dto/update-media.dto';
+import { VideoTypeEnum } from './enums/video-type.enum';
 
 @Injectable()
 export class MediaService {
@@ -50,6 +51,7 @@ export class MediaService {
         videoId: dto.videoId,
         thumbnailId: dto.thumbnailId,
         lyrics: dto.videoLyrics,
+        type: dto.videoType || VideoTypeEnum.video,
       } as VideoModel);
     }
 
@@ -154,6 +156,10 @@ export class MediaService {
         { nameEn: { [Op.iLike]: `%${query.search}%` } },
         { nameRu: { [Op.iLike]: `%${query.search}%` } },
       ];
+    }
+
+    if (query.type) {
+      where.type = query.type;
     }
 
     if (query.albumId) {

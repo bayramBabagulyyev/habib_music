@@ -1,5 +1,5 @@
 
-import { AboutModel, AlbumModel, AudioModel, BannerModel, FileModel, GenreMediaModel, GenreModel, MediaModel, ReelsModel, UserModel, VideoModel } from '@db/models';
+import { AboutModel, AlbumModel, AudioModel, BannerModel, FileModel, GenreMediaModel, GenreModel, MediaModel, UserModel, VideoModel } from '@db/models';
 import { Sequelize } from 'sequelize-typescript';
 import { dataBaseConfig } from './db.config';
 import { IDatabaseConfigAttributes } from './db.interface';
@@ -27,7 +27,6 @@ export const databaseProviders = [
         MediaModel,
         AboutModel,
         BannerModel,
-        ReelsModel
       ]);
       // await sequelize.sync();
       await sequelize.sync({ alter: true });

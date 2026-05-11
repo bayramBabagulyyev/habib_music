@@ -1,4 +1,5 @@
-import { AlbumModel, AudioModel, ReelsModel, VideoModel } from '@db/models';
+import { AlbumModel, AudioModel, VideoModel } from '@db/models';
+import { VideoTypeEnum } from '@modules/media/enums/video-type.enum';
 import { Inject, Injectable } from '@nestjs/common';
 import { Sequelize, col, fn, literal } from 'sequelize';
 import { QueryStatisticsDto } from './dto/query-statistics.dto';
@@ -12,8 +13,6 @@ export class StatisticsService {
         private readonly video: typeof VideoModel,
         @Inject('ALBUM')
         private readonly album: typeof AlbumModel,
-        @Inject('REELS')
-        private readonly reels: typeof ReelsModel,
         @Inject('SEQUELIZE')
         private readonly sequelize: Sequelize,
     ) { }
@@ -38,9 +37,10 @@ export class StatisticsService {
                     [fn('COALESCE', fn('SUM', col('shareCount')), 0), 'totalShares'],
                     [fn('COUNT', col('id')), 'totalCount'],
                 ],
+                where: { type: VideoTypeEnum.video },
                 raw: true,
             }),
-            this.reels.findOne({
+            this.video.findOne({
                 attributes: [
                     [fn('COALESCE', fn('SUM', col('listenCount')), 0), 'totalListens'],
                     [fn('COALESCE', fn('SUM', col('downloadCount')), 0), 'totalDownloads'],
@@ -48,6 +48,7 @@ export class StatisticsService {
                     [fn('COALESCE', fn('SUM', col('shareCount')), 0), 'totalShares'],
                     [fn('COUNT', col('id')), 'totalCount'],
                 ],
+                where: { type: VideoTypeEnum.short },
                 raw: true,
             }),
         ]);
@@ -109,13 +110,13 @@ export class StatisticsService {
                 group: [fn('EXTRACT', literal('MONTH FROM "VideoModel"."createdAt"'))],
                 raw: true,
             }),
-            this.reels.findAll({
+            this.video.findAll({
                 attributes: [
-                    [fn('EXTRACT', literal("MONTH FROM \"ReelsModel\".\"createdAt\"")), 'month'],
+                    [fn('EXTRACT', literal("MONTH FROM \"VideoModel\".\"createdAt\"")), 'month'],
                     [fn('COALESCE', fn('SUM', col('listenCount')), 0), 'listens'],
                 ],
-                where: literal(`"ReelsModel"."createdAt" BETWEEN '${startDate}' AND '${endDate}'`),
-                group: [fn('EXTRACT', literal('MONTH FROM "ReelsModel"."createdAt"'))],
+                where: literal(`"VideoModel"."createdAt" BETWEEN '${startDate}' AND '${endDate}'`),
+                group: [fn('EXTRACT', literal('MONTH FROM "VideoModel"."createdAt"'))],
                 raw: true,
             }),
         ]);
