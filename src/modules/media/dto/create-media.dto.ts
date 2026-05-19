@@ -56,6 +56,17 @@ export class CreateMediaDto {
     @IsNumber()
     thumbnailId?: number;
 
+    // Audio-specific fields
+    @ApiProperty({
+        type: 'number',
+        required: false,
+        description: 'Thumbnail file ID for audio',
+    })
+    @IsOptional()
+    @Type(() => Number)
+    @IsNumber()
+    videoThumbnailId?: number;
+
     @ApiProperty({
         type: 'number',
         required: false,

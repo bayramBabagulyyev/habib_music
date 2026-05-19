@@ -49,7 +49,7 @@ export class MediaService {
       await this.video.create({
         mediaId: newMedia.id,
         videoId: dto.videoId,
-        thumbnailId: dto.thumbnailId,
+        thumbnailId: dto.videoThumbnailId ?? "",
         lyrics: dto.videoLyrics,
         type: dto.videoType || VideoTypeEnum.video,
       } as VideoModel);
@@ -352,7 +352,7 @@ export class MediaService {
       if (videoRecord) {
         await videoRecord.update({
           videoId: dto.videoId ?? videoRecord.videoId,
-          thumbnailId: dto.thumbnailId ? videoRecord.thumbnailId : videoRecord.thumbnailId,
+          thumbnailId: dto.videoThumbnailId ?? videoRecord.thumbnailId,
           lyrics: dto.videoLyrics ?? videoRecord.lyrics,
         });
       }
