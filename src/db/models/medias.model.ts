@@ -52,4 +52,7 @@ export class MediaModel extends Model<MediaModel> {
 
   @Column({ type: DataType.BOOLEAN, allowNull: false, defaultValue: false })
   comingSoon: boolean;
+
+  @Column({ type: DataType.INTEGER, allowNull: true })
+  priority?: number;
 }

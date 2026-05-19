@@ -33,6 +33,7 @@ export class MediaService {
       descriptionRu: dto.descriptionRu,
       albumId: dto.albumId,
       comingSoon: dto.comingSoon ?? false,
+      priority: dto.priority
     } as MediaModel);
 
     // Create audio or video record if IDs are provided
@@ -194,7 +195,10 @@ export class MediaService {
       where: where,
       limit: limit,
       offset: skip,
-      order: [[orderBy, orderDirection]],
+      order: [
+        [{ model: MediaModel, as: 'media' }, 'priority', 'DESC NULLS LAST'],
+        [orderBy, orderDirection],
+      ],
       include: include,
       distinct: true,
     });
@@ -252,7 +256,10 @@ export class MediaService {
       where: where,
       limit: limit,
       offset: skip,
-      order: [[orderBy, orderDirection]],
+      order: [
+        [{ model: MediaModel, as: 'media' }, 'priority', 'DESC NULLS LAST'],
+        [orderBy, orderDirection],
+      ],
       include: include,
       distinct: true,
     });
@@ -329,6 +336,7 @@ export class MediaService {
       descriptionRu: dto.descriptionRu,
       albumId: dto.albumId,
       comingSoon: dto.comingSoon ?? false,
+      priority: dto.priority
     });
 
     // Update audio if provided

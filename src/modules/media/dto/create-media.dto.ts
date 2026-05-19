@@ -67,6 +67,18 @@ export class CreateMediaDto {
     @IsNumber()
     videoThumbnailId?: number;
 
+
+    // Priority
+    @ApiProperty({
+        type: 'number',
+        required: false,
+        description: 'Thumbnail file ID for audio',
+    })
+    @IsOptional()
+    @Type(() => Number)
+    @IsNumber()
+    priority?: number;
+
     @ApiProperty({
         type: 'number',
         required: false,
