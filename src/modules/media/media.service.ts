@@ -345,7 +345,7 @@ export class MediaService {
       if (audioRecord) {
         await audioRecord.update({
           audioId: dto.audioId ?? audioRecord.audioId,
-          thumbnailId: dto.thumbnailId ? audioRecord.thumbnailId : audioRecord.thumbnailId,
+          thumbnailId: dto.thumbnailId ? dto.thumbnailId : audioRecord.thumbnailId,
           lyrics: dto.audioLyrics ?? audioRecord.lyrics,
         });
       }
