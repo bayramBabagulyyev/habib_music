@@ -30,4 +30,13 @@ export class ActionMedia {
     @Type(() => Number)
     @IsNumber()
     listen: number
+
+    @ApiProperty({
+        type: 'number',
+        required: false
+    })
+    @IsOptional()
+    @Type(() => Number)
+    @IsNumber()
+    share?: number
 }

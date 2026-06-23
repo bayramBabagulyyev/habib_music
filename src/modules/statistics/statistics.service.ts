@@ -1,4 +1,5 @@
-import { AlbumModel, AudioModel, VideoModel } from '@db/models';
+import { responseMessage } from '@common/http';
+import { AlbumModel, AudioModel, MediaModel, VideoModel } from '@db/models';
 import { VideoTypeEnum } from '@modules/media/enums/video-type.enum';
 import { Inject, Injectable } from '@nestjs/common';
 import { Sequelize, col, fn, literal } from 'sequelize';
@@ -7,6 +8,8 @@ import { QueryStatisticsDto } from './dto/query-statistics.dto';
 @Injectable()
 export class StatisticsService {
     constructor(
+        @Inject('MEDIA')
+        private readonly media: typeof MediaModel,
         @Inject('AUDIO')
         private readonly audio: typeof AudioModel,
         @Inject('VIDEO')
@@ -158,5 +161,67 @@ export class StatisticsService {
             ...overview,
             chart: monthlyListeners,
         };
+    }
+
+    async getMediaStatistics() {
+        const [audioStats, videoStats, mediaCount, audioCount, videoCount] = await Promise.all([
+            this.audio.findOne({
+                attributes: [
+                    [fn('COALESCE', fn('SUM', col('likeCount')), 0), 'likeCount'],
+                    [fn('COALESCE', fn('SUM', col('dislikeCount')), 0), 'dislikeCount'],
+                    [fn('COALESCE', fn('SUM', col('listenCount')), 0), 'listenCount'],
+                    [fn('COALESCE', fn('SUM', col('downloadCount')), 0), 'downloadCount'],
+                    [fn('COALESCE', fn('SUM', col('shareCount')), 0), 'shareCount'],
+                ],
+                raw: true,
+            }) as unknown as Record<string, number>,
+            this.video.findOne({
+                attributes: [
+                    [fn('COALESCE', fn('SUM', col('likeCount')), 0), 'likeCount'],
+                    [fn('COALESCE', fn('SUM', col('dislikeCount')), 0), 'dislikeCount'],
+                    [fn('COALESCE', fn('SUM', col('listenCount')), 0), 'listenCount'],
+                    [fn('COALESCE', fn('SUM', col('downloadCount')), 0), 'downloadCount'],
+                    [fn('COALESCE', fn('SUM', col('shareCount')), 0), 'shareCount'],
+                ],
+                raw: true,
+            }) as unknown as Record<string, number>,
+            this.media.count(),
+            this.audio.count(),
+            this.video.count(),
+        ]);
+
+        const toNum = (v: unknown) => Number(v) || 0;
+
+        const audioData = {
+            total: audioCount,
+            likeCount: toNum(audioStats?.likeCount),
+            dislikeCount: toNum(audioStats?.dislikeCount),
+            listenCount: toNum(audioStats?.listenCount),
+            downloadCount: toNum(audioStats?.downloadCount),
+            shareCount: toNum(audioStats?.shareCount),
+        };
+
+        const videoData = {
+            total: videoCount,
+            likeCount: toNum(videoStats?.likeCount),
+            dislikeCount: toNum(videoStats?.dislikeCount),
+            listenCount: toNum(videoStats?.listenCount),
+            downloadCount: toNum(videoStats?.downloadCount),
+            shareCount: toNum(videoStats?.shareCount),
+        };
+
+        const total = {
+            media: mediaCount,
+            likeCount: audioData.likeCount + videoData.likeCount,
+            dislikeCount: audioData.dislikeCount + videoData.dislikeCount,
+            listenCount: audioData.listenCount + videoData.listenCount,
+            downloadCount: audioData.downloadCount + videoData.downloadCount,
+            shareCount: audioData.shareCount + videoData.shareCount,
+        };
+
+        return responseMessage({
+            action: 'success',
+            data: { audio: audioData, video: videoData, total },
+        });
     }
 }

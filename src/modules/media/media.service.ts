@@ -419,15 +419,17 @@ export class MediaService {
     if (!audio) {
       throw new NotFoundException("Audio not found");
     };
-    console.log(audio.likeCount, audio.listenCount, audio.downloadCount);
-    const newLikeCount = audio.likeCount ?? +0 + +data.like;
-    const newListenCount = audio.listenCount ?? +0 + +data.listen;
-    const newDownloadCount = audio.downloadCount ?? +0 + +data.download;
+
+    const newLikeCount = (audio.likeCount ?? 0) + (Number(data.like) || 0);
+    const newListenCount = (audio.listenCount ?? 0) + (Number(data.listen) || 0);
+    const newDownloadCount = (audio.downloadCount ?? 0) + (Number(data.download) || 0);
+    const newShareCount = (audio.shareCount ?? 0) + (Number(data.share) || 0);
 
     await audio.update({
       likeCount: newLikeCount,
       listenCount: newListenCount,
-      downloadCount: newDownloadCount
+      downloadCount: newDownloadCount,
+      shareCount: newShareCount
     })
     return
   }
@@ -438,14 +440,16 @@ export class MediaService {
       throw new NotFoundException("Video not found");
     };
 
-    const newLikeCount = video.likeCount ?? +0 + +data.like;
-    const newListenCount = video.listenCount ?? +0 + +data.listen;
-    const newDownloadCount = video.downloadCount ?? +0 + +data.download;
+    const newLikeCount = (video.likeCount ?? 0) + (Number(data.like) || 0);
+    const newListenCount = (video.listenCount ?? 0) + (Number(data.listen) || 0);
+    const newDownloadCount = (video.downloadCount ?? 0) + (Number(data.download) || 0);
+    const newShareCount = (video.shareCount ?? 0) + (Number(data.share) || 0);
 
     await video.update({
       likeCount: newLikeCount,
       listenCount: newListenCount,
-      downloadCount: newDownloadCount
+      downloadCount: newDownloadCount,
+      shareCount: newShareCount
     })
     return
   }

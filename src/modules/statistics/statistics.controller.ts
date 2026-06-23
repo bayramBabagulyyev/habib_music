@@ -1,4 +1,4 @@
-import { TOKEN_NAME } from '@modules/auth';
+import { SkipAuth, TOKEN_NAME } from '@modules/auth';
 import { Controller, Get, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { QueryStatisticsDto } from './dto/query-statistics.dto';
@@ -26,5 +26,12 @@ export class StatisticsController {
     @ApiOperation({ summary: 'Get monthly listener chart data' })
     getMonthlyListeners(@Query() query: QueryStatisticsDto) {
         return this.statisticsService.getMonthlyListeners(query);
+    }
+
+    @SkipAuth()
+    @Get('media')
+    @ApiOperation({ summary: 'Get media statistics (audio + video counts and totals)' })
+    getMediaStatistics() {
+        return this.statisticsService.getMediaStatistics();
     }
 }
