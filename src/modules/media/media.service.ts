@@ -310,6 +310,14 @@ export class MediaService {
             { model: FileModel, as: 'audio' },
           ],
         },
+        {
+          model: VideoModel,
+          as: 'video',
+          include: [
+            { model: FileModel, as: 'thumbnail' },
+            { model: FileModel, as: 'video' },
+          ],
+        },
         { model: GenreModel, as: 'genres' },
       ],
     });
