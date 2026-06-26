@@ -84,6 +84,15 @@ export class AboutService {
     return responseMessage({ action: 'success', data: mapped });
   }
 
+  async findAvatars(id: number) {
+    const about = await this.about.findByPk(id);
+    if (!about) {
+      throw new NotFoundException('About not found');
+    }
+    const avatars = await this.fileService.findByAbout(id);
+    return responseMessage({ action: 'success', data: avatars });
+  }
+
   async update(
     id: number,
     dto: Partial<CreateAboutDto>,

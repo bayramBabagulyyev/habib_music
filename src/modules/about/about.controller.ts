@@ -50,6 +50,14 @@ export class AboutController {
   }
 
   @SkipAuth()
+  @Get(':id/avatars')
+  findAvatars(
+    @Param('id') id: string,
+  ) {
+    return this.aboutService.findAvatars(+id);
+  }
+
+  @SkipAuth()
   @Get(':id')
   findOne(
     @Param('id') id: string,

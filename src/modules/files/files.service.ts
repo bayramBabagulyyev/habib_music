@@ -82,7 +82,16 @@ export class FilesService {
   }
 
   async updateForAbout(aboutId: number, fileIds: number[]) {
-    await this.file.update({ aboutId: aboutId }, { where: { id: { [Op.in]: fileIds } } });
+    // unlink files previously associated with this about
+    await this.file.update({ aboutId: null } as any, { where: { aboutId } });
+    // link the new set of files
+    if (fileIds?.length)
+      await this.file.update({ aboutId: aboutId }, { where: { id: { [Op.in]: fileIds } } });
+  }
+
+  async findByAbout(aboutId: number) {
+    const files = await this.file.findAll({ where: { aboutId } });
+    return files.map((each) => ImageMapper.toDto(each));
   }
 
   async remove(id: number) {
