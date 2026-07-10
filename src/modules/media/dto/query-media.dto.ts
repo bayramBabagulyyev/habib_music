@@ -34,4 +34,13 @@ export class QueryMediaDto extends PaginationDto {
     @IsEnum(VideoTypeEnum)
     type?: VideoTypeEnum;
 
+    @ApiProperty({ type: 'boolean', required: false })
+    @IsOptional()
+    @Type(() => String)
+    audioStatus?: boolean;
+
+    @ApiProperty({ type: 'boolean', required: false })
+    @IsOptional()
+    @Type(() => String)
+    videoStatus?: boolean;
 }

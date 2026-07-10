@@ -51,4 +51,10 @@ export class AudioModel extends Model<AudioModel> {
   @Column({ type: DataType.TEXT, allowNull: false, defaultValue: '' })
   lyrics: string
 
+  @Column({
+    type: DataType.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
+  })
+  audioStatus: boolean;
 }

@@ -43,6 +43,7 @@ export class MediaService {
         audioId: dto.audioId,
         thumbnailId: dto.thumbnailId,
         lyrics: dto.audioLyrics,
+        audioStatus: dto.audioStatus
       } as AudioModel);
     }
 
@@ -53,6 +54,7 @@ export class MediaService {
         thumbnailId: dto.videoThumbnailId ?? "",
         lyrics: dto.videoLyrics,
         type: dto.videoType || VideoTypeEnum.video,
+        videoStatus: dto.videoStatus
       } as VideoModel);
     }
 
@@ -163,6 +165,10 @@ export class MediaService {
       where.type = query.type;
     }
 
+    if (query.videoStatus) {
+      where.videoStatus = query.videoStatus;
+    }
+
     if (query.albumId) {
       whereMedia.albumId = query.albumId;
     }
@@ -226,6 +232,10 @@ export class MediaService {
 
     if (query.albumId) {
       whereMedia.albumId = query.albumId;
+    }
+
+    if (query.audioStatus) {
+      where.audioStatus = query.audioStatus;
     }
 
     // If a genre filter is requested, add it as a nested include on the media association
@@ -355,6 +365,7 @@ export class MediaService {
           audioId: dto.audioId ?? audioRecord.audioId,
           thumbnailId: dto.thumbnailId ? dto.thumbnailId : audioRecord.thumbnailId,
           lyrics: dto.audioLyrics ?? audioRecord.lyrics,
+          audioStatus: dto.audioStatus
         });
       }
     } else if (dto.audioId === null) {
@@ -370,6 +381,7 @@ export class MediaService {
           videoId: dto.videoId ?? videoRecord.videoId,
           thumbnailId: dto.videoThumbnailId ?? videoRecord.thumbnailId,
           lyrics: dto.videoLyrics ?? videoRecord.lyrics,
+          videoStatus: dto.videoStatus
         });
       }
     } else if (dto.videoId === null) {

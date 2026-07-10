@@ -57,4 +57,11 @@ export class VideoModel extends Model<VideoModel> {
     defaultValue: VideoTypeEnum.video,
   })
   type!: VideoTypeEnum
+
+  @Column({
+    type: DataType.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
+  })
+  videoStatus: boolean;
 }

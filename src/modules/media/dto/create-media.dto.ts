@@ -120,4 +120,14 @@ export class CreateMediaDto {
     @IsOptional()
     @IsEnum(VideoTypeEnum)
     videoType?: VideoTypeEnum
+
+    @ApiProperty({ type: 'boolean', required: false })
+    @IsOptional()
+    @Type(() => String)
+    audioStatus?: boolean;
+
+    @ApiProperty({ type: 'boolean', required: false })
+    @IsOptional()
+    @Type(() => String)
+    videoStatus?: boolean;
 }
